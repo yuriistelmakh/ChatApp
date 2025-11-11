@@ -7,6 +7,6 @@ export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'signup', component: Signup },
   { path: 'chat', component: ChatLayoutComponent },
-  { path: '', pathMatch: 'full', redirectTo: 'chat' },
-  { path: '**', redirectTo: 'chat' },
+  { path: '', pathMatch: 'full', redirectTo: 'login' },
+  { path: '**', redirectTo: 'login' },
 ];

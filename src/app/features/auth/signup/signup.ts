@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../../../services/auth.service';
 import { NgIf } from '@angular/common';
 import { validateHorizontalPosition } from '@angular/cdk/overlay';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -26,7 +27,7 @@ export class Signup {
   form: FormGroup;
   errorMsg: string | undefined = undefined;
 
-  constructor(private fb: FormBuilder, private auth: AuthService) {
+  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
     this.form = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -44,7 +45,10 @@ export class Signup {
       const password = this.form.get('password')?.value;
 
       this.auth.signUp({ username, password }).subscribe({
-        next: data => console.log(data.success + " " + data.message + " " + data.token),
+        next: data => {
+          this.router.navigate(["/chat"]);
+          localStorage.setItem("token", data.token);
+        },
         error: err => this.errorMsg = err.error
       });
     }

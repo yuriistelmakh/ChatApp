@@ -13,7 +13,7 @@
         @else
         {
             <ul #messagesList class="messages-list">
-                @for(message of messages; track message)
+                @for(message of signalr.messages; track message)
                 {
                     <li [ngClass]="{'outgoing': !message.isIncoming}">
                         <app-message [message]="message"></app-message>

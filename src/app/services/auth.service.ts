@@ -4,6 +4,12 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthRequest } from '../dtos/AuthRequest';
 import { AuthResult } from '../dtos/AuthResult';
+import { jwtDecode } from 'jwt-decode';
+
+interface JwtPayload {
+  nameid: string,
+  unique_name: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -21,5 +27,16 @@ export class AuthService {
     return this.http.post<AuthResult>(
       `${environment.apiUrl}/Auth/login`, request
     );
+  }
+
+  getUserId(): number | null {
+    const token = localStorage.getItem("token");
+    if(token)
+    {
+      const decoded = jwtDecode<JwtPayload>(token);
+      return parseInt(decoded.nameid);
+    }
+
+    return null;
   }
 }

@@ -15,8 +15,4 @@ export class App {
   protected readonly title = signal('chat-app-ui');
 
   constructor(private http: HttpClient) {}
-
-  onClick() {
-    this.http.get(`${environment.apiUrl}/test`).subscribe(data => console.log(data));
-  }
 }

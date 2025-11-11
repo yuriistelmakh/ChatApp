@@ -21,7 +21,8 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/staticwebapp.config.json"
             ],
             "styles": ["src/custom-theme.scss", "src/styles.css"]
           },

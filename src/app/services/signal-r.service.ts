@@ -18,7 +18,7 @@ export class SignalRService {
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(`${environment.apiUrl}/chat`, {
         withCredentials: true,
-        accessTokenFactory: () => localStorage.getItem("token") ?? ''
+        accessTokenFactory: () => localStorage.getItem('token') ?? '',
       })
       .withAutomaticReconnect()
       .build();
@@ -26,11 +26,10 @@ export class SignalRService {
     this.hubConnection
       .start()
       .then(() => console.log('SignalR connected'))
-      .catch(err => console.log('Error ocurred! ', err))
+      .catch((err) => console.log('Error ocurred! ', err));
 
     this.hubConnection.on('ReceiveMessage', (userId: number, msg: MessageDto) => {
-      if (userId != this.auth.getUserId())
-      {
+      if (userId != this.auth.getUserId()) {
         msg.isIncoming = true;
         this.messages.push(msg);
       }
@@ -38,19 +37,29 @@ export class SignalRService {
   }
 
   sendMessage(chatId: number, message: MessageDto) {
-    this.hubConnection.invoke('SendMessageToGroup', chatId, this.auth.getUserId(), message)
-      .catch(err => console.error(err));
-    
+    this.hubConnection
+      .invoke('SendMessageToGroup', chatId, this.auth.getUserId(), message)
+      .catch((err) => console.error(err));
+
     this.messages.push(message);
   }
 
   joinChat(chatId: number) {
-    this.hubConnection.invoke('JoinChat', chatId)
-      .catch(err => console.error(err));
+    this.hubConnection
+      .invoke<MessageDto[]>('JoinChat', chatId)
+      .then((messages) => {
+        messages.forEach((m) => {
+          if (m.senderName !== this.auth.getUserName()) {
+            m.isIncoming = true;
+          }
+        });
+
+        this.messages = messages;
+      })
+      .catch((err) => console.error('JoinChat error:', err));
   }
 
   leaveChat(chatId: number) {
-    this.hubConnection.invoke('LeaveChat', chatId)
-      .catch(err => console.error(err));
+    this.hubConnection.invoke('LeaveChat', chatId).catch((err) => console.error(err));
   }
 }

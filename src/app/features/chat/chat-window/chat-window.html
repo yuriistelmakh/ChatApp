@@ -6,11 +6,7 @@
     </div>
 
     <div class="chat-area">
-        @if(!selectedChat)
-        {
-            <p class="no-chat-selected">select a chat, bozo</p>
-        }
-        @else
+        @if(selectedChat)
         {
             <ul #messagesList class="messages-list">
                 @for(message of signalr.messages; track message)

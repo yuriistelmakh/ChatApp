@@ -52,23 +52,20 @@ export class ChatWindow implements OnInit {
     this.signalr.startConnection();
   }
 
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   if(changes['selectedChat'] && !changes['selectedChat'].firstChange) {
-  //     for (let i = 0; i < 3; i++) {
-  //       this.messages.push({
-  //         id: i,
-  //         content: Math.random().toString(),
-  //         createdAt: new Date(Date.now()),
-  //         senderName: "Sender1",
-  //         isIncoming: i % 2 == 0
-  //       });
-  //     }
-  //   }
-  // }
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes['selectedChat']) {
+      if (!changes['selectedChat'].firstChange)
+      {
+        
+      }
+    }
+  }
 
   onSend() {
     if (this.messageText.trim()) {
-      this.signalr.sendMessage({
+      this.signalr.sendMessage(
+      this.selectedChat!.id,
+      {
         id: this.signalr.messages.length + 1,
         content: this.messageText,
         createdAt: new Date(Date.now()),

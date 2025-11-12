@@ -3,6 +3,7 @@ import { ChatSidebarItem } from "../chat-sidebar-item/chat-sidebar-item";
 import { UserDto } from '../../../dtos/UserDto';
 import { ChatDto } from '../../../dtos/ChatDto';
 import { MessageDto } from '../../../dtos/MessageDto';
+import { SignalRService } from '../../../services/signal-r.service';
 
 @Component({
   selector: 'app-chat-sidebar',

@@ -17,12 +17,19 @@
                 }
                 <li #bottomAnchor class="anchor" aria-hidden="true"></li>
             </ul>
-            <div class="input-area">
-                <input [(ngModel)]="messageText" class="input">
-                <button class="send-btn" (click)="onSend()" matFab="filled">
-                    <mat-icon style="margin: 0px">send</mat-icon>
-                </button>
-            </div>
+                <form class="input-area" (ngSubmit)="onSend()" autocomplete="off">
+                    <input
+                        #messageInput
+                        name="message"
+                        [(ngModel)]="messageText"
+                        class="input"
+                        type="text"
+                        placeholder="Type a message"
+                    />
+                    <button class="send-btn" type="submit" matFab="filled" aria-label="Send message">
+                        <mat-icon style="margin: 0">send</mat-icon>
+                    </button>
+                </form>
         }
     </div>
 </div>

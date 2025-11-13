@@ -1,5 +1,5 @@
 .container {
-    width: 180px;
+    width: 220px;
     display: flex;
     background-color: var(--mat-sys-inverse-primary);
     height: 100%;
@@ -9,4 +9,15 @@
 h2 {
     padding: 16px 0px 0px 10px;
     color: var(--mat-sys-on-primary-container);
+}
+
+ul {
+    list-style: none;
+    padding: 20px;
+}
+
+li {
+    color: var(--mat-sys-on-primary-container);
+    font-size: 16px;
+    padding: 5px 0;
 }

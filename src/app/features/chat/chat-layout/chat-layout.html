@@ -1,5 +1,5 @@
 <div class="chat-layout">
     <app-chat-sidebar (chatSelected)="onChatSelected($event)"></app-chat-sidebar>
     <app-chat-window [selectedChat]="selectedChat"></app-chat-window>
-    <app-chat-users-list></app-chat-users-list>
+    <app-chat-users-list [selectedChat]="selectedChat"></app-chat-users-list>
 </div>

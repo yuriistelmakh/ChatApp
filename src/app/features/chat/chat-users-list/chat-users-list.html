@@ -1,5 +1,14 @@
+@if (this.selectedChat) {
 <div class="container">
     <div class="cotnent">
-        <h2>Group members</h2>
+        <h2>Chat members</h2>
+        <ul>
+            @for (user of this.signalr.users; track user) {
+            <li>
+                {{ user.username }}
+            </li>
+            }
+        </ul>
     </div>
 </div>
+}

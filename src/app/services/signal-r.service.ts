@@ -1,10 +1,13 @@
-import { Injectable, signal } from '@angular/core';
+import { EventEmitter, Injectable, signal } from '@angular/core';
 import * as signalR from '@microsoft/signalr'
 import { MessageDto } from '../dtos/MessageDto';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 import { ChatDto } from '../dtos/ChatDto';
 import { ChatService } from './chat.service';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { UserDto } from '../dtos/UserDto';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,8 +16,11 @@ export class SignalRService {
   private hubConnection!: signalR.HubConnection;
   messages: MessageDto[] = [];
   chats: ChatDto[] = [];
+  users: UserDto[] = [];
+  private _newMessageReceived = new Subject<void>();
+  $newMessageReceived = this._newMessageReceived.asObservable();
 
-  constructor(private auth: AuthService, private chat: ChatService) {}
+  constructor(private auth: AuthService, private chatService: ChatService, private userService: UserService) {}
 
   startConnection(): void {
     this.hubConnection = new signalR.HubConnectionBuilder()
@@ -34,6 +40,7 @@ export class SignalRService {
       if (userId != this.auth.getUserId()) {
         msg.isIncoming = true;
         this.messages.push(msg);
+        this._newMessageReceived.next();
       }
     });
 
@@ -55,7 +62,7 @@ export class SignalRService {
       .invoke<MessageDto[]>('JoinChat', chatId)
       .then(() => {
         const userName = this.auth.getUserName();
-        this.chat.getMessages(chatId).subscribe({
+        this.chatService.getMessages(chatId).subscribe({
           next: messages => {
             messages.forEach((m: MessageDto) => {
               if (m.senderName != userName)
@@ -66,11 +73,15 @@ export class SignalRService {
             });
 
             this.messages = messages;
-            console.log('u joined a chat');
           },
           error: err => {
             console.error("Error ocurred fetching messages: ", err);
           }
+        });
+
+        this.userService.getChatUsers(chatId).subscribe({
+          next: users => {this.users = users; console.log(users)},
+          error: err => console.error(err)
         });
       })
       .catch((err) => console.error('JoinChat error:', err));

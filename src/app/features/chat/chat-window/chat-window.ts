@@ -35,6 +35,9 @@ export class ChatWindow implements OnInit {
   @ViewChild('messagesList')
   private list?: ElementRef<HTMLUListElement>;
 
+  @ViewChild('messageInput')
+  private messageInput?: ElementRef<HTMLInputElement>;
+
   constructor(public signalr: SignalRService, private auth: AuthService) {}
 
   private scrollToBottom() {
@@ -50,31 +53,27 @@ export class ChatWindow implements OnInit {
 
   ngOnInit(): void {
     this.signalr.startConnection();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if(changes['selectedChat']) {
-      if (!changes['selectedChat'].firstChange)
-      {
-        
-      }
-    }
+    this.signalr.$newMessageReceived.subscribe(() => this.scrollToBottom());
   }
 
   onSend() {
-    if (this.messageText.trim()) {
-      this.signalr.sendMessage(
-      this.selectedChat!.id,
-      {
-        id: this.signalr.messages.length + 1,
-        content: this.messageText,
-        createdAt: new Date(Date.now()),
-        senderName: this.auth.getUserName()!,
-        isIncoming: false
-      });
-
-      this.messageText = '';
-      queueMicrotask(() => this.scrollToBottom());
+    if (!this.messageText.trim()) {
+      this.messageInput?.nativeElement.focus();
+      return;
     }
+
+    this.signalr.sendMessage(this.selectedChat!.id, {
+      id: this.signalr.messages.length + 1,
+      content: this.messageText,
+      createdAt: new Date(Date.now()),
+      senderName: this.auth.getUserName()!,
+      isIncoming: false,
+    });
+
+    this.messageText = '';
+    queueMicrotask(() => {
+      this.scrollToBottom();
+      this.messageInput?.nativeElement.focus();
+    });
   }
 }

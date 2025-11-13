@@ -8,7 +8,6 @@
 }
 
 .panel {
-    width: 100%;
     max-width: 420px;
     background: var(--mat-sys-surface-container-low);
     border-radius: 12px;

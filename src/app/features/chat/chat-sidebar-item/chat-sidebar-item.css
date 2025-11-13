@@ -13,3 +13,10 @@
     color: var(--mat-sys-surface);
     cursor: pointer;
 }
+
+@media (max-width: 768px) {
+    .container {
+        padding: 5px;
+        font-size: 12px;
+    }
+}

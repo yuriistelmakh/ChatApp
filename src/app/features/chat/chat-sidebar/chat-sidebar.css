@@ -39,3 +39,35 @@ h2 {
     width: 180px;
 }
 
+.short-text {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .content {
+        padding-bottom: 5px;
+    }
+    
+    h2 {
+        display: none;
+    }
+
+    .container {
+        width: 100px;
+    }
+
+    .new-chat-btn {
+        width: 80px;
+        font-size: 12px;
+        height: 30px;
+        padding: 0px;
+    }
+
+    .short-text {
+        display: inline;
+    }
+
+    .full-text {
+        display: none;
+    }
+}

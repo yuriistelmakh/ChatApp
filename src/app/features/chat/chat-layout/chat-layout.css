@@ -7,5 +7,12 @@
 }
 
 app-chat-window {
-    flex: 1;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+@media (max-width: 768px) {
+    .chat-layout {
+        width: 100vw;
+    }
 }

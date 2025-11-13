@@ -43,3 +43,10 @@ li {
     align-self: stretch;
     margin-top: auto;
 }
+
+
+@media (max-width: 768px) {
+    .container {
+        display: none;
+    }
+}

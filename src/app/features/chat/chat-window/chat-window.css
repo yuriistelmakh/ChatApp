@@ -46,6 +46,7 @@
     align-self: flex-end;
 }
 
+
 .messages-list li:not(.outgoing){
     align-self: flex-start;
 }
@@ -78,4 +79,38 @@
     display: flex;
     justify-content: center;
     margin-right: 10px;
+}
+
+.send-btn-icon {
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .top-bar-content {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .input-area {
+        min-height: 30px;
+    }
+
+    .input {
+        padding: 4px;
+        font-size: 12px;
+    }
+
+    .send-btn {
+        height: 20px;
+        width: 20px;
+        font-size: 12
+    }
+
+    .material-icons {
+        font-size: 14px
+    }
+
+    .send-btn-icon {
+        height: 12px
+    }
 }

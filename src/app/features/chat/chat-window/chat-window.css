@@ -36,10 +36,10 @@
     gap: 5px;
     overflow-y: auto;
     overflow-x: hidden;
+    scroll-behavior: smooth;
     scrollbar-width: thin;
     scrollbar-color: var(--mat-sys-primary) transparent;
     scrollbar-gutter: stable both-edges;
-    scroll-behavior: smooth;
 }
 
 .messages-list li.outgoing {
@@ -79,23 +79,3 @@
     justify-content: center;
     margin-right: 10px;
 }
-
-/* WebKit scrollbar styling */
-.messages-list::-webkit-scrollbar { width: 8px; }
-.messages-list::-webkit-scrollbar-track { background: transparent; }
-.messages-list::-webkit-scrollbar-thumb {
-    background-color: var(--mat-sys-primary);
-    border-radius: 8px;
-    border: 2px solid transparent;
-    background-clip: content-box;
-}
-.messages-list::-webkit-scrollbar-thumb:hover {
-    background-color: var(--mat-sys-primary-container);
-}
-
-/* Dark theme overrides if html.dark is used */
-html.dark .messages-list { scrollbar-color: var(--mat-sys-primary) transparent; }
-html.dark .messages-list::-webkit-scrollbar-thumb { background-color: var(--mat-sys-primary); }
-
-/* anchor element to ensure scrollIntoView has a target with size */
-.messages-list .anchor { height: 1px; }

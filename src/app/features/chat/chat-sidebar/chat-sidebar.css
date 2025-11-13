@@ -27,6 +27,10 @@ h2 {
     flex: 1;
     min-height: 0;
     overflow-y: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--mat-sys-primary) transparent;
+    scrollbar-gutter: stable both-edges;
 }
 
 .new-chat-btn {
@@ -34,3 +38,4 @@ h2 {
     align-self: center;
     width: 180px;
 }
+

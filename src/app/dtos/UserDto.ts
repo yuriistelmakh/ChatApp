@@ -1,5 +1,5 @@
 export interface UserDto {
     id : number,
     username: string,
-    createdAt: Date
+    createdAt: string
 }

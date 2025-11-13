@@ -39,37 +39,37 @@ export class SignalRService {
       .catch((err) => console.log('Error ocurred! ', err));
 
     this.hubConnection.on('ReceiveMessage', (userId: number, msg: MessageDto) => {
-      if (userId != this.auth.getUserId()) {
-        msg.isIncoming = true;
-        this.messages.push(msg);
+      if (userId !== this.auth.getUserId()) {
+        const normalized = this.normalizeMessage(msg, true);
+        this.messages.push(normalized);
         this._newMessageReceived.next();
       }
     });
 
     this.hubConnection.on('ChatCreated', (createChatDto: CreateChatDto) => {
-        if(createChatDto.memberIds.includes(this.auth.getUserId()!))
-        {
-          this.chats.push(createChatDto.chat);
-        }
+      if (createChatDto.memberIds.includes(this.auth.getUserId()!)) {
+        this.chats.push(this.normalizeChat(createChatDto.chat));
+      }
     });
 
     this.hubConnection.on('NewMemberAdded', (dto: AddUserToChatDto) => {
-      this.users.push(dto.user);
+      const normalizedUser = this.normalizeUser(dto.user);
+      this.users.push(normalizedUser);
 
-      console.log(this.auth.getUserId(), " ", dto.user.id)
-      if(this.auth.getUserId() == dto.user.id)
-      {
-        this.chats.push(dto.chat);
+      if (this.auth.getUserId() === normalizedUser.id) {
+        this.chats.push(this.normalizeChat(dto.chat));
       }
-    })
+    });
   }
 
   sendMessage(chatId: number, message: MessageDto) {
+    const normalized = this.normalizeMessage(message, false);
+
     this.hubConnection
-      .invoke('SendMessageToGroup', chatId, this.auth.getUserId(), message)
+      .invoke('SendMessageToGroup', chatId, this.auth.getUserId(), normalized)
       .catch((err) => console.error(err));
 
-    this.messages.push(message);
+    this.messages.push(normalized);
   }
 
   joinChat(chatId: number) {
@@ -79,15 +79,11 @@ export class SignalRService {
         const userName = this.auth.getUserName();
         this.chatService.getMessages(chatId).subscribe({
           next: messages => {
-            messages.forEach((m: MessageDto) => {
-              if (m.senderName != userName)
-              {
-                m.isIncoming = true;
-              }
-              return m;
-            });
+            const normalized = messages.map((m: MessageDto) =>
+              this.normalizeMessage(m, m.senderName !== userName)
+            );
 
-            this.messages = messages;
+            this.messages = normalized;
           },
           error: err => {
             console.error("Error ocurred fetching messages: ", err);
@@ -95,7 +91,9 @@ export class SignalRService {
         });
 
         this.userService.getChatUsers(chatId).subscribe({
-          next: users => {this.users = users; console.log(users)},
+          next: users => {
+            this.users = users.map(user => this.normalizeUser(user));
+          },
           error: err => console.error(err)
         });
       })
@@ -109,5 +107,41 @@ export class SignalRService {
 
   leaveChat(chatId: number) {
     this.hubConnection.invoke('LeaveChat', chatId).catch((err) => console.error(err));
+  }
+
+  private normalizeMessage(message: MessageDto, isIncoming: boolean): MessageDto {
+    return {
+      ...message,
+      createdAt: this.toUtcString(message.createdAt),
+      isIncoming,
+    };
+  }
+
+  private normalizeChat(chat: ChatDto): ChatDto {
+    return {
+      ...chat,
+      createdAt: this.toUtcString(chat.createdAt),
+    };
+  }
+
+  private normalizeUser(user: UserDto): UserDto {
+    return {
+      ...user,
+      createdAt: this.toUtcString(user.createdAt),
+    };
+  }
+
+  private toUtcString(value: string | Date | undefined | null): string {
+    if (!value) {
+      return new Date().toISOString();
+    }
+
+    const date = typeof value === 'string' ? new Date(value) : value;
+
+    if (isNaN(date.getTime())) {
+      return new Date().toISOString();
+    }
+
+    return date.toISOString();
   }
 }

@@ -1,5 +1,5 @@
 <div class="container" [ngClass]="{ 'incoming': message.isIncoming, 'outgoing': !message.isIncoming }">
     <p class="sender-name">{{ message.isIncoming ? message.senderName : "" }}</p>
     <p>{{ message.content }}</p>
-    <p class="sent-at">{{ message.createdAt | date: "HH:mm" }}</p>
+    <p class="sent-at">{{ message.createdAt | date: 'HH:mm' }}</p>
 </div>

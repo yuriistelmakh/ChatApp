@@ -103,7 +103,7 @@ export class NewChatDialog implements OnInit {
     }
     this.chatService
       .addChat({
-        chat: { id: 0, name: this.chatName, isGroup: false, createdAt: new Date(Date.now()) },
+        chat: { id: 0, name: this.chatName, isGroup: false, createdAt: new Date().toISOString() },
         memberIds: userIds,
       })
       .subscribe((data) => console.log(data));

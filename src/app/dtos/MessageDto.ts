@@ -1,7 +1,7 @@
 export interface MessageDto {
     id: number,
     content: string,
-    createdAt: Date,
+    createdAt: string,
     senderName: string,
     isIncoming: boolean
 }

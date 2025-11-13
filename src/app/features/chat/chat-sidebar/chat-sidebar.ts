@@ -31,7 +31,15 @@ export class ChatSidebarComponent implements OnInit {
   ngOnInit(): void {
     this.chatService.getChats(this.auth.getUserId()!).subscribe({
       next: chats => {
-        this.signalr.chats = chats;
+        const toUtc = (value: string) => {
+          const parsed = new Date(value);
+          return isNaN(parsed.getTime()) ? new Date().toISOString() : parsed.toISOString();
+        };
+
+        this.signalr.chats = chats.map(chat => ({
+          ...chat,
+          createdAt: toUtc(chat.createdAt),
+        }));
       },
       error: err => console.error(err)
     });

@@ -65,7 +65,7 @@ export class ChatWindow implements OnInit {
     this.signalr.sendMessage(this.selectedChat!.id, {
       id: this.signalr.messages.length + 1,
       content: this.messageText,
-      createdAt: new Date(Date.now()),
+      createdAt: new Date().toISOString(),
       senderName: this.auth.getUserName()!,
       isIncoming: false,
     });

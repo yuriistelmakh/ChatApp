@@ -39,7 +39,7 @@ export class SignalRService {
       .catch((err) => console.log('Error ocurred! ', err));
 
     this.hubConnection.on('ReceiveMessage', (userId: number, msg: MessageDto) => {
-      const normalized = this.normalizeMessage(msg, this.auth.getUserName() == msg.senderName);
+      const normalized = this.normalizeMessage(msg, this.auth.getUserName() != msg.senderName);
       this.messages.push(normalized);
       this._newMessageReceived.next();
     });

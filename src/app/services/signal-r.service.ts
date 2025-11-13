@@ -1,11 +1,11 @@
-import { EventEmitter, Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr'
 import { MessageDto } from '../dtos/MessageDto';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 import { ChatDto } from '../dtos/ChatDto';
 import { ChatService } from './chat.service';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { UserDto } from '../dtos/UserDto';
 import { UserService } from './user.service';
 import { AddUserToChatDto } from '../dtos/AddUserToChatDto';
@@ -39,11 +39,9 @@ export class SignalRService {
       .catch((err) => console.log('Error ocurred! ', err));
 
     this.hubConnection.on('ReceiveMessage', (userId: number, msg: MessageDto) => {
-      if (userId !== this.auth.getUserId()) {
-        const normalized = this.normalizeMessage(msg, true);
-        this.messages.push(normalized);
-        this._newMessageReceived.next();
-      }
+      const normalized = this.normalizeMessage(msg, this.auth.getUserName() == msg.senderName);
+      this.messages.push(normalized);
+      this._newMessageReceived.next();
     });
 
     this.hubConnection.on('ChatCreated', (createChatDto: CreateChatDto) => {
@@ -68,8 +66,6 @@ export class SignalRService {
     this.hubConnection
       .invoke('SendMessageToGroup', chatId, this.auth.getUserId(), normalized)
       .catch((err) => console.error(err));
-
-    this.messages.push(normalized);
   }
 
   joinChat(chatId: number) {

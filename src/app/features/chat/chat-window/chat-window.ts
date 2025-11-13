@@ -68,6 +68,7 @@ export class ChatWindow implements OnInit {
       createdAt: new Date().toISOString(),
       senderName: this.auth.getUserName()!,
       isIncoming: false,
+      sentiment: 2
     });
 
     this.messageText = '';

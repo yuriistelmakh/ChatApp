@@ -1,5 +1,14 @@
 <div class="container" [ngClass]="{ 'incoming': message.isIncoming, 'outgoing': !message.isIncoming }">
     <p class="sender-name">{{ message.isIncoming ? message.senderName : "" }}</p>
     <p>{{ message.content }}</p>
-    <p class="sent-at">{{ message.createdAt | date: 'HH:mm' }}</p>
+   <div class="sentiment">
+        <span class="sent-at">{{ message.createdAt | date: 'HH:mm' }}</span>
+        @switch (message.sentiment) {
+            @case (0) { <span>🟩</span> }
+            @case (1) { <span>🟨</span> }
+            @case (2) { <span>🟥</span> }
+            @case (3) { <span>🟪</span> }
+            @default { <span>❓</span> }
+        }
+    </div>
 </div>

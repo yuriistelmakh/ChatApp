@@ -23,8 +23,12 @@
 }
 
 .sent-at {
-    align-self: flex-end;
     font-size: 12px;
+}
+
+.sentiment {
+    align-self: flex-end;
+    display: inline;
 }
 
 @media (max-width: 768px) {

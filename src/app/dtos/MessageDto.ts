@@ -3,5 +3,7 @@ export interface MessageDto {
     content: string,
     createdAt: string,
     senderName: string,
-    isIncoming: boolean
+    isIncoming: boolean,
+    sentiment: number
 }
+

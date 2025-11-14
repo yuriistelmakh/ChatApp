@@ -18,6 +18,8 @@ import { NewChatDialog } from '../new-chat-dialog/new-chat-dialog';
 })
 export class ChatSidebarComponent implements OnInit {
   @Output() chatSelected = new EventEmitter<ChatDto>();
+  selectedChatId: number = 0;
+
 
   constructor(private chatService: ChatService, 
     private auth: AuthService, 
@@ -25,6 +27,7 @@ export class ChatSidebarComponent implements OnInit {
     public signalr: SignalRService) {}
 
   onChatSelected(chat: ChatDto) {
+    this.selectedChatId = chat.id;
     this.chatSelected.emit(chat);
   }
 

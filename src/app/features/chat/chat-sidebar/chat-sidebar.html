@@ -5,7 +5,7 @@
             @for (chat of signalr.chats; track chat.id)
             {
                 <li (click)="onChatSelected(chat)" style="cursor: pointer;">
-                    <app-chat-sidebar-item [chat]="chat"></app-chat-sidebar-item>
+                    <app-chat-sidebar-item [chat]="chat" [isSelected]="selectedChatId == chat.id"></app-chat-sidebar-item>
                 </li>
             }
         </ul>

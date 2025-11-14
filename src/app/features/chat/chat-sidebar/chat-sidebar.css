@@ -13,24 +13,25 @@
     flex-direction: column;
     min-height: 0;
     padding: 16px 0px;
+    width: 100%;
     gap: 12px;
 }
 
 h2 {
     color: var(--mat-sys-on-primary-container);
-    padding: 0 20px
+    padding: 0 16px
 }
 
 .chats-list {
     list-style: none;
     padding: 0;
-    flex: 1;
+    width: 100%;
     min-height: 0;
     overflow-y: auto;
     scroll-behavior: smooth;
     scrollbar-width: thin;
     scrollbar-color: var(--mat-sys-primary) transparent;
-    scrollbar-gutter: stable both-edges;
+    scrollbar-gutter: stable;
 }
 
 .new-chat-btn {

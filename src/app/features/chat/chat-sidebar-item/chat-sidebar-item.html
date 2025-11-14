@@ -1,4 +1,4 @@
-<div matRipple class="container">
+<div matRipple class="container" [ngClass]="{ 'selected': isSelected }">
     <mat-icon>person_outline</mat-icon>
     <p>{{ chat.name }}</p>
 </div>

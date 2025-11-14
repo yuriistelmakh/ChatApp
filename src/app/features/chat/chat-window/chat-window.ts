@@ -1,4 +1,5 @@
 import {
+  AfterViewChecked,
   Component,
   ElementRef,
   Input,
@@ -24,7 +25,7 @@ import { AuthService } from '../../../services/auth.service';
   templateUrl: './chat-window.html',
   styleUrl: './chat-window.css',
 })
-export class ChatWindow implements OnInit {
+export class ChatWindow implements OnInit, OnChanges {
   @Input() selectedChat?: ChatDto;
 
   messageText: string = '';
@@ -39,6 +40,8 @@ export class ChatWindow implements OnInit {
   private messageInput?: ElementRef<HTMLInputElement>;
 
   constructor(public signalr: SignalRService, private auth: AuthService) {}
+
+  private shouldScroll = false;
 
   private scrollToBottom() {
     const el = this.list?.nativeElement;
@@ -56,6 +59,16 @@ export class ChatWindow implements OnInit {
     this.signalr.$newMessageReceived.subscribe(() => this.scrollToBottom());
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedChat']) {
+      setTimeout(() => {
+        console.log("hey!");
+        this.scrollToBottom();
+        this.messageInput?.nativeElement.focus();
+      }, 200);
+    }
+  }
+
   onSend() {
     if (!this.messageText.trim()) {
       this.messageInput?.nativeElement.focus();
@@ -68,7 +81,7 @@ export class ChatWindow implements OnInit {
       createdAt: new Date().toISOString(),
       senderName: this.auth.getUserName()!,
       isIncoming: false,
-      sentiment: 2
+      sentiment: 2,
     });
 
     this.messageText = '';
